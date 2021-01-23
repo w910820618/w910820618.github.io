@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>基于 Golang 实现的 Shadowsocks 源码解析 | 洲洋的编程课堂</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    <script charset="utf-8" src="https://my.openwrite.cn/js/readmore.js"></script>
+    <meta name="description" content="为大家带来精彩的编程课程">
+    
+    <link rel="preload" href="/blog/assets/css/0.styles.f2626484.css" as="style"><link rel="preload" href="/blog/assets/js/app.432edff4.js" as="script"><link rel="preload" href="/blog/assets/js/2.8f60b400.js" as="script"><link rel="preload" href="/blog/assets/js/9.62d074f8.js" as="script"><link rel="preload" href="/blog/assets/js/6.c1fdf07b.js" as="script"><link rel="prefetch" href="/blog/assets/js/3.ea1459c2.js"><link rel="prefetch" href="/blog/assets/js/4.1ab6a84e.js"><link rel="prefetch" href="/blog/assets/js/5.327bf6b6.js"><link rel="prefetch" href="/blog/assets/js/7.a026bb7e.js"><link rel="prefetch" href="/blog/assets/js/8.ee761b4b.js">
+    <link rel="stylesheet" href="/blog/assets/css/0.styles.f2626484.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/blog/" class="home-link router-link-active"><!----> <span class="site-name">洲洋的编程课堂</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/blog/golang/shadowsocks.html" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  Golang
+</a></div><div class="nav-item"><a href="/blog/ios/" class="nav-link">
+  iOS
+</a></div><div class="nav-item"><a href="/blog/android/" class="nav-link">
+  Android
+</a></div><div class="nav-item"><a href="/blog/java/" class="nav-link">
+  Java
+</a></div><div class="nav-item"><a href="/blog/rails/" class="nav-link">
+  Ruby on Rails
+</a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/blog/golang/shadowsocks.html" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  Golang
+</a></div><div class="nav-item"><a href="/blog/ios/" class="nav-link">
+  iOS
+</a></div><div class="nav-item"><a href="/blog/android/" class="nav-link">
+  Android
+</a></div><div class="nav-item"><a href="/blog/java/" class="nav-link">
+  Java
+</a></div><div class="nav-item"><a href="/blog/rails/" class="nav-link">
+  Ruby on Rails
+</a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>基于 Golang 实现的 Shadowsocks 源码解析</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/blog/golang/shadowsocks.html#_1-什么是隧道代理" class="sidebar-link">1. 什么是隧道代理？</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/golang/shadowsocks.html#_1-1-代理-proxy" class="sidebar-link">1.1 代理 （Proxy）</a></li><li class="sidebar-sub-header"><a href="/blog/golang/shadowsocks.html#_1-2-隧道-tunnel" class="sidebar-link">1.2 隧道 （Tunnel）</a></li></ul></li><li><a href="/blog/golang/shadowsocks.html#_2-本教程的实验环境是什么样的-实现本教程中的示例都需要提前准备哪些条件" class="sidebar-link">2. 本教程的实验环境是什么样的？实现本教程中的示例都需要提前准备哪些条件？</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/blog/golang/shadowsocks.html#_3-shadowsocks是如何实现隧道代理的" class="sidebar-link">3. Shadowsocks是如何实现隧道代理的？</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/golang/shadowsocks.html#_3-1-客户端如何处理数据流" class="sidebar-link">3.1 客户端如何处理数据流</a></li><li class="sidebar-sub-header"><a href="/blog/golang/shadowsocks.html#_3-2-服务端如何处理数据流" class="sidebar-link">3.2 服务端如何处理数据流</a></li><li class="sidebar-sub-header"><a href="/blog/golang/shadowsocks.html#_3-3-目的端ip的读写" class="sidebar-link">3.3 目的端IP的读写</a></li><li class="sidebar-sub-header"><a href="/blog/golang/shadowsocks.html#_3-4-数据流的转发是如何实现的" class="sidebar-link">3.4 数据流的转发是如何实现的</a></li></ul></li><li><a href="/blog/golang/shadowsocks.html#_4-我们可以学习到哪些技术点" class="sidebar-link">4. 我们可以学习到哪些技术点？</a><ul class="sidebar-sub-headers"></ul></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="基于-golang-实现的-shadowsocks-源码解析"><a href="#基于-golang-实现的-shadowsocks-源码解析" class="header-anchor">#</a> 基于 Golang 实现的 Shadowsocks 源码解析</h1> <p>你好，欢迎来到<strong>洲洋的编程课堂</strong>！</p> <p>本人邮箱：w910820618@126.com ，欢迎交流讨论学习相关的内容。</p> <p>欢迎转载，转载请标注 ：<strong>洲洋的编程课堂</strong>。</p> <p>本教程的Youtube视频在：https://youtube.com/playlist?list=PLRwNnzR6FpVVBs2uYVV_ivZJnfrYAj0GP</p> <p>本教程的B站视频在：https://www.bilibili.com/video/BV1sy4y1H7KC/</p> <hr> <p>本教程是基于 <strong>github.com/shadowsocks/go-shadowsocks2</strong>项目，我将通过分析该项目的源码来帮助大家学习如何通过Golang来实现一个隧道代理转发工具。</p> <p>我会把重点代码罗列出来，方便大家在阅读源码的时候能够找到代码的主线。</p> <p>本教程主要会从以下四个问题入手：</p> <ol><li>什么是隧道代理？</li> <li>本教程的实验环境是什么样的？实现本教程中的示例都需要提前准备哪些条件？</li> <li>Shadowsocks是如何实现隧道代理的？</li> <li>我们可以学习到哪些技术点？</li></ol> <h2 id="_1-什么是隧道代理"><a href="#_1-什么是隧道代理" class="header-anchor">#</a> 1. 什么是隧道代理？</h2> <p>隧道代理是两个技术的结合，本别是隧道+代理两个技术的结合，分别来解释一下这个词语。</p> <h3 id="_1-1-代理-proxy"><a href="#_1-1-代理-proxy" class="header-anchor">#</a> 1.1 代理 （Proxy）</h3> <p>代理（英语：Proxy）也称网络代理，是一种特殊的网络服务，允许一个网络终端（一般为客户端）通过这个服务与另一个网络终端（一般为服务器）进行非直接的连接。一些网关、路由器等网络设备具备网络代理功能。一般认为代理服务有利于保障网络终端的隐私或安全，防止攻击。</p> <p><img src="https://raw.githubusercontent.com/w910820618/shadowsocks/master/images/proxy.jpg" alt=""></p> <p>上图中，代理服务器既是服务器又是客户端。客户端向代理发送请求报文，代理服务器必须向服务器一样，正确的处理请求和连接，然后返回响应。同时，代理自身要向服务器发送请求，这样，其行为必须像正确的客户端一样，要发送请求并接收响应。</p> <p>代理服务器的特点：</p> <ul><li>客户端不知道真正的服务器是谁，服务器也不知道客户端是什么样的</li> <li>客户端同代理服务器，代理服务器同服务器，这两者之间使用的通讯协议是一样的</li> <li>代理服务器会对接收的请求进行解析，重新封装后再发送给服务器；在服务器响应后，对响应进行解析，重新封装后再发送给客户端。</li></ul> <h3 id="_1-2-隧道-tunnel"><a href="#_1-2-隧道-tunnel" class="header-anchor">#</a> 1.2 隧道 （Tunnel）</h3> <p>隧道（英语：Tunneling ）是一种网络通讯协议，在其中，使用一种网络协议（发送协议），将另一个不同的网络协议，封装在负载部分。使用隧道的原因是在不兼容的网络上传输数据，或在不安全网络上提供一个安全路径。</p> <p><img src="https://raw.githubusercontent.com/w910820618/shadowsocks/master/images/tunnel_pro.jpg" alt=""></p> <p>隧道的特点：</p> <ul><li>该协议是为承载协议自身以外的流量而编写的协议</li> <li>允许数据从一个网络移动到另一个网络</li> <li>只关心流量的传输，不对承载的流量进行解析</li></ul> <h2 id="_2-本教程的实验环境是什么样的-实现本教程中的示例都需要提前准备哪些条件"><a href="#_2-本教程的实验环境是什么样的-实现本教程中的示例都需要提前准备哪些条件" class="header-anchor">#</a> 2. 本教程的实验环境是什么样的？实现本教程中的示例都需要提前准备哪些条件？</h2> <p><img src="https://raw.githubusercontent.com/w910820618/shadowsocks/master/images/tunnel.jpg" alt=""></p> <p>上图就是本实验的网络架构图，下面说明一下架构图的含义：</p> <ul><li>其中有两个192.168.0.0和192.168.1.0网段的IP 的虚拟机，用它作为<strong>中转机</strong>；</li> <li>192.168.1.105、192.168.1.106以及192.168.1.107这三台机器作用<strong>目的端</strong>；</li> <li>192.168.0.103 这台机器作为<strong>客户端</strong>；</li></ul> <p>本实验中所需要的基本开发环境：</p> <ul><li>三台Ubuntu 18.04 的虚拟机</li> <li>Golang 的编译环境 （1.15以上）</li> <li>IDE 可自选</li></ul> <p>实验的目的是： 搭建从192.168.0.103 到 192.168.0.104 之间的隧道代理，使 客户端（192.168.0.103）可以访问到 目的端 的内容。</p> <h2 id="_3-shadowsocks是如何实现隧道代理的"><a href="#_3-shadowsocks是如何实现隧道代理的" class="header-anchor">#</a> 3. Shadowsocks是如何实现隧道代理的？</h2> <p>我们以实现TCP隧道代理为例，分别针对客户端和服务端源码中的关键代码来和大家进行分析以下问题：</p> <ol><li>客户端如何处理数据流</li> <li>服务端如何处理数据流</li> <li>目的端IP的读写</li> <li>数据流的转发是如何实现的</li></ol> <h3 id="_3-1-客户端如何处理数据流"><a href="#_3-1-客户端如何处理数据流" class="header-anchor">#</a> 3.1 客户端如何处理数据流</h3> <p>我截取了tcp.go中<strong>tcpLocal</strong>函数的源码：</p> <div class="language-golang line-numbers-mode"><pre class="language-text"><code>func tcpLocal(addr, server string, shadow func(net.Conn) net.Conn, getAddr func(net.Conn) (socks.Addr, error)) {
+        l, err := net.Listen(&quot;tcp&quot;, addr) // 监听本地IP
+        ...
+        for {
+                c, err := l.Accept()
+                ...
+                go func() {
+                        tgt, err := getAddr(c)  // 获取目的端IP
+                        ...
+                        rc, err := net.Dial(&quot;tcp&quot;, server)  // 向服务端发数据
+
+                        if _, err = rc.Write(tgt); err != nil { // 在数据流中写入目的端IP
+                               
+                        }
+                        
+                        if err = relay(rc, c); err != nil { // 数据流 Copy        
+                        }
+                }()
+        }
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br></div></div><p>在客户端中一共涉及到了三个IP，它们分别是<strong>本地IP</strong>、<strong>服务端IP</strong>、<strong>目的端IP</strong>。</p> <p>我来解释一下上述代码的含义。</p> <p>当客户端程序启动的时候，客户端监听本地的代理地址——127.0.0.1:8803，然后我们再把系统中的代理地址设置为127.0.0.1:8803，这个时候通过浏览器访问的数据流就都会从代理地址出去，从而数据流就会进入到客户端程序中。</p> <p>当客户端程序接收到数据流之后，先从配置文件中找到该数据流要去的目的端IP，并将目的端IP写进数据流中。这样当服务端接收到数据流的时候就可以知道目的端IP。</p> <h3 id="_3-2-服务端如何处理数据流"><a href="#_3-2-服务端如何处理数据流" class="header-anchor">#</a> 3.2 服务端如何处理数据流</h3> <p>这段是我截取自tcp.go中<strong>tcpRemote</strong>函数的代码。</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>func tcpRemote(addr string, shadow func(net.Conn) net.Conn) {
+	l, err := net.Listen(&quot;tcp&quot;, addr) // 监听本地端口
+	...
+	for {
+		c, err := l.Accept()
+		...
+		go func() {
+			defer c.Close()
+			...
+			sc := shadow(c)
+			...
+			tgt, err := socks.ReadAddr(sc) // 读取目的端IP
+			...
+			rc, err := net.Dial(&quot;tcp&quot;, tgt.String()) // 向目的端发送数据
+			...
+			if err = relay(sc, rc); err != nil { // 流量转发
+				
+			}
+		}()
+	}
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br></div></div><p>服务端处理数据流的方式与客户端类似，都是先监听本地端口，当接收到请求之后像目的地址进行流量发送。</p> <h3 id="_3-3-目的端ip的读写"><a href="#_3-3-目的端ip的读写" class="header-anchor">#</a> 3.3 目的端IP的读写</h3> <h4 id="_3-3-1-客户端如何写入目的端ip"><a href="#_3-3-1-客户端如何写入目的端ip" class="header-anchor">#</a> 3.3.1 客户端如何写入目的端IP？</h4> <p>为了让大家可以更清晰地理解代码，我们先回答另一个问题目的端IP是怎么来的？</p> <p>我们看main.go文件中的代码，</p> <div class="language-golang line-numbers-mode"><pre class="language-text"><code>if flags.TCPTun != &quot;&quot; {
+			for _, tun := range strings.Split(flags.TCPTun, &quot;,&quot;) {
+				p := strings.Split(tun, &quot;=&quot;)
+				go tcpTun(p[0], addr, p[1], ciph.StreamConn)
+			}
+		}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><p>从代码中我们可以看到两点：</p> <ol><li>我们可以同时建设多条隧道；</li> <li>目的端的IP来自等号的左侧；</li></ol> <p>接着我们看tcp.go中的<strong>tcpTun</strong>函数：</p> <div class="language-golang line-numbers-mode"><pre class="language-text"><code>func tcpTun(addr, server, target string, shadow func(net.Conn) net.Conn) {
+	tgt := socks.ParseAddr(target)
+	if tgt == nil {
+		logf(&quot;invalid target address %q&quot;, target)
+		return
+	}
+	logf(&quot;TCP tunnel %s &lt;-&gt; %s &lt;-&gt; %s&quot;, addr, server, target)
+	tcpLocal(addr, server, shadow, func(net.Conn) (socks.Addr, error) { return tgt, nil })
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><p>我想一些对golang语法不是太熟悉的小伙伴们，估计对<code>shadow func(net.Conn) net.Conn</code>以及<code>func(net.Conn) (socks.Addr, error) { return tgt, nil }</code>这两个参数传递有点困惑。</p> <p><strong>在golang中可以把函数作为一种类型，并且可以把函数作为参数进行传递</strong>。</p> <div class="language-golang line-numbers-mode"><pre class="language-text"><code>func(net.Conn) (socks.Addr, error) {
+      return tgt, nil 
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><p>把代码重新调整一下格式，大家就不难看出其实这就是一个接收<code>net.Conn</code>作为参数返回将<code>tgt</code>作为返回值的函数。</p> <p>在tcp隧道代理中目的端IP是通过<code>tgt := socks.ParseAddr(target)</code>格式化出来的。</p> <p>我们梳理清楚了客户端如何得到目的端IP，接下来让我们看一下客户端是如何将IP写入数据流中。</p> <p>写入数据流的操作是通过<code>rc.Write(tgt)</code>，它其实就是<code>conn.Write()</code>。说白了，客户端就是将目的IP 通过 <code>conn.Write()</code>写入到数据流中。</p> <h4 id="_3-3-2-服务端如何解析出目的端ip呢"><a href="#_3-3-2-服务端如何解析出目的端ip呢" class="header-anchor">#</a> 3.3.2 服务端如何解析出目的端IP呢？</h4> <p><code>tgt, err := socks.ReadAddr(sc)</code>是服务端获取目的IP的入口。</p> <p>进入<code>ReadAddr()</code>函数，可以看到它接受的是一个io.Reader类型的参数，并将它再传递给<code>readAddr()</code>函数进行具体的处理。</p> <div class="language-golang line-numbers-mode"><pre class="language-text"><code>func ReadAddr(r io.Reader) (Addr, error) {
+	return readAddr(r, make([]byte, MaxAddrLen))
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><p>接下来进入<code>readAdder()</code>函数，来看看具体的处理流程。</p> <div class="language-golang line-numbers-mode"><pre class="language-text"><code>func readAddr(r io.Reader, b []byte) (Addr, error) {
+	if len(b) &lt; MaxAddrLen {
+		return nil, io.ErrShortBuffer
+	}
+	_, err := io.ReadFull(r, b[:1]) // read 1st byte for address type
+	if err != nil {
+		return nil, err
+	}
+
+	switch b[0] {
+	case AtypDomainName:
+		_, err = io.ReadFull(r, b[1:2]) // read 2nd byte for domain length
+		if err != nil {
+			return nil, err
+		}
+		_, err = io.ReadFull(r, b[2:2+int(b[1])+2])
+		return b[:1+1+int(b[1])+2], err
+	case AtypIPv4:
+		_, err = io.ReadFull(r, b[1:1+net.IPv4len+2])
+		return b[:1+net.IPv4len+2], err
+	case AtypIPv6:
+		_, err = io.ReadFull(r, b[1:1+net.IPv6len+2])
+		return b[:1+net.IPv6len+2], err
+	}
+
+	return nil, ErrAddressNotSupported
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br></div></div><p>这里面使用主要使用了<code>io.ReadFull()</code>函数，这个函数可以把对象Reader中的数据读出来，然后存入一个缓冲区buf中，以便其他代码可以处理buf中的数据。</p> <p>我们可以通过这段代码看出，我们可以通过buf中的第一位判断IP地址的类型，然后根据不同类型的IP来截取buf中对应长度的内容就可以获得IP地址了。</p> <h3 id="_3-4-数据流的转发是如何实现的"><a href="#_3-4-数据流的转发是如何实现的" class="header-anchor">#</a> 3.4 数据流的转发是如何实现的</h3> <p>我们来看一下tcp.go文件中的<code>repaly()</code>函数。</p> <div class="language-golang line-numbers-mode"><pre class="language-text"><code>func relay(left, right net.Conn) error {
+	var err, err1 error
+	var wg sync.WaitGroup
+	var wait = 5 * time.Second
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		_, err1 = io.Copy(right, left)
+		right.SetReadDeadline(time.Now().Add(wait)) // unblock read on right
+	}()
+	_, err = io.Copy(left, right)
+	left.SetReadDeadline(time.Now().Add(wait)) // unblock read on left
+	wg.Wait()
+	if err1 != nil &amp;&amp; !errors.Is(err1, os.ErrDeadlineExceeded) { // requires Go 1.15+
+		return err1
+	}
+	if err != nil &amp;&amp; !errors.Is(err, os.ErrDeadlineExceeded) {
+		return err
+	}
+	return nil
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br></div></div><p>本教程中最关键的代码而就是<code>io.Copy()</code>函数，这就是代理的核心，代理的本质，是转发两个相同方向路径上的stream(数据流)。
+再看一下<code>io.Copy(）</code>的源码：</p> <div class="language-golang line-numbers-mode"><pre class="language-text"><code>func Copy(dst Writer, src Reader) (written int64, err error) {
+	// If the reader has a WriteTo method, use it to do the copy.
+	// Avoids an allocation and a copy.
+	if wt, ok := src.(WriterTo); ok {
+		return wt.WriteTo(dst)
+	}
+	// Similarly, if the writer has a ReadFrom method, use it to do the copy.
+	if rt, ok := dst.(ReaderFrom); ok {
+		return rt.ReadFrom(src)
+	}
+	buf := make([]byte, 32*1024)
+	for {
+		nr, er := src.Read(buf)
+		if nr &gt; 0 {
+			nw, ew := dst.Write(buf[0:nr])
+			if nw &gt; 0 {
+				written += int64(nw)
+			}
+			if ew != nil {
+				err = ew
+				break
+			}
+			if nr != nw {
+				err = ErrShortWrite
+				break
+			}
+		}
+		if er == EOF {
+			break
+		}
+		if er != nil {
+			err = er
+			break
+		}
+	}
+	return written, err
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br></div></div><p>阻塞式的从src输入流读数据到dst输出流。由于<code>io.Copy()</code>是阻塞式的复制，所以我们需要使用到协程来提高程序的运行效率。</p> <h2 id="_4-我们可以学习到哪些技术点"><a href="#_4-我们可以学习到哪些技术点" class="header-anchor">#</a> 4. 我们可以学习到哪些技术点？</h2> <p>最后，我总结一下通过解析shadowsockets源码学习到的技术点有以下3点：</p> <ol><li>可以通过将目的端IP写入数据流中的方式让服务端知道目的IP；</li> <li>在golang中可以通过io.Copy()函数实现流量的转发</li> <li>遇到阻塞式函数的时候为了避免程序阻塞可以使用go routine的方式讲阻塞函数单独放到一个协程中；</li> <li><code>sync.WaitGroup</code>函数的优点是Wait()可以阻塞到队列中的所有任务都执行完才解除阻塞</li></ol> <hr> <p>欢迎关注我的公众号，不定期分析技术好文。</p> <p><img src="https://raw.githubusercontent.com/w910820618/shadowsocks/master/images/qrcode_for_gh_4afc5ec351d9_430.jpg" alt=""></p> <div data-v-db4e9952></div></div> <footer class="page-edit"><!----> <!----></footer> <!----> </main></div><div class="global-ui"><global-HideArticle></global-HideArticle></div></div>
+    <script src="/blog/assets/js/app.432edff4.js" defer></script><script src="/blog/assets/js/2.8f60b400.js" defer></script><script src="/blog/assets/js/9.62d074f8.js" defer></script><script src="/blog/assets/js/6.c1fdf07b.js" defer></script>
+  </body>
+</html>
