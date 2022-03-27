@@ -3,22 +3,23 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: 洲洋的博客
 subtitle: ''
 description: ''
 keywords:
-author: John Doe
-language: en
+author: 吴洲洋
+language: zh-CN
 timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: http://w910820618.github.io
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
   trailing_html: true # Set to false to remove trailing '.html' from permalinks
+  tab_replac/: ''
 
 # Directory
 source_dir: source
@@ -97,7 +98,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: hexo-theme-matery
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
@@ -105,3 +106,35 @@ deploy:
   type: git
   repository: https://github.com/w910820618/w910820618.github.io
   branch: main
+
+menu:
+  Index:
+    url: /
+    icon: fas fa-home
+  Tags:
+    url: /tags
+    icon: fas fa-tags
+  Categories:
+    url: /categories
+    icon: fas fa-bookmark
+  Archives:
+    url: /archives
+    icon: fas fa-archive
+  About:
+    url: /about
+    icon: fas fa-user-circle
+  Friends:
+    url: /friends
+    icon: fas fa-address-book
+
+permalink_pinyin:
+  enable: true
+  separator: '-' # default: '-'
+
+postInfo:
+  date: true
+  update: false
+  wordCount: false # set true.
+  totalCount: false # set true.
+  min2read: false # set true.
+  readCount: false # set true.

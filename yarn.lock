@@ -549,6 +549,11 @@
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
 
+"fsevents@~2.3.2":
+  "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
+  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
+  "version" "2.3.2"
+
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
   "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
@@ -669,6 +674,14 @@
     "hexo-pagination" "1.0.0"
     "timsort" "^0.3.0"
 
+"hexo-generator-search@^2.4.3":
+  "integrity" "sha512-Z5hfZq2g3np/Tgdp2q9HobfIvU6Pdz89tnTurc1IIq/vW0MHgDynk0Aiv6kvMtKWthnZ5l0iEMT3YLN35NdYwQ=="
+  "resolved" "https://registry.npmjs.org/hexo-generator-search/-/hexo-generator-search-2.4.3.tgz"
+  "version" "2.4.3"
+  dependencies:
+    "nunjucks" "^3.0.1"
+    "utils-merge" "^1.0.0"
+
 "hexo-generator-tag@^1.0.0":
   "integrity" "sha512-JDoB2T1EncRlyGSjuAhkGxRfKkN8tq0i8tFlk9I4q2L6iYxPaUnFenhji0oxufTADC16/IchuPjmMk//dt8Msg=="
   "resolved" "https://registry.npmjs.org/hexo-generator-tag/-/hexo-generator-tag-1.0.0.tgz"
@@ -759,6 +772,11 @@
     "htmlparser2" "^7.0.0"
     "prismjs" "^1.17.1"
     "strip-indent" "^3.0.0"
+
+"hexo-wordcount@^6.0.1":
+  "integrity" "sha512-tbo2P9xRWEKQmRf7+XuPjx9It1MnaE26nA+EEb2DN39gK1x+26W7Nm4Iyp4AugQjBWYYDx7OLn4gp1WFxQpQew=="
+  "resolved" "https://registry.npmjs.org/hexo-wordcount/-/hexo-wordcount-6.0.1.tgz"
+  "version" "6.0.1"
 
 "hexo@^6.0.0":
   "integrity" "sha512-TeV2cN61CD2C1GKczJRR3tdZhR3JUQi8wtS4eIgkDOeDYWTmovPoSCcc8jvh42D3fehOPp6E81fTeyjh39QWtA=="
@@ -1148,7 +1166,7 @@
   "resolved" "https://registry.npmjs.org/normalize-path/-/normalize-path-3.0.0.tgz"
   "version" "3.0.0"
 
-"nunjucks@^3.2.1", "nunjucks@^3.2.3":
+"nunjucks@^3.0.1", "nunjucks@^3.2.1", "nunjucks@^3.2.3":
   "integrity" "sha512-psb6xjLj47+fE76JdZwskvwG4MYsQKXUtMsPh6U0YMvmyjRtKRFcxnlXGWglNybtNTNVmGdp94K62/+NjF5FDQ=="
   "resolved" "https://registry.npmjs.org/nunjucks/-/nunjucks-3.2.3.tgz"
   "version" "3.2.3"
@@ -1571,7 +1589,7 @@
   "resolved" "https://registry.npmjs.org/urix/-/urix-0.1.0.tgz"
   "version" "0.1.0"
 
-"utils-merge@1.0.1":
+"utils-merge@^1.0.0", "utils-merge@1.0.1":
   "integrity" "sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM="
   "resolved" "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.1.tgz"
   "version" "1.0.1"
